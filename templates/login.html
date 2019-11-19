@@ -1,0 +1,34 @@
+{% extends 'layoutsinentrar.html' %}
+
+<!-- MAIN -->
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <H1>EL JUEGO DEL AHORCADO</H1>
+
+    <h1>LOGIN</h1>
+    <p>usuario: h@h.com clave:123</p>
+    <div class="field">
+      <div class="control">
+        <form action="{{ url_for("login") }}" method="POST">
+          <input class="input is-medium" type="email" name="correo" id="correo" />
+          <input class="input is-medium" type="password" name="contrasenya" id="contrasenya" />
+          <div class="control">
+            <button class="btn btn-success btn-lg" type="submit">ENTRAR</button>
+          </div>
+        </form>
+      </div>
+    </div>
+        {% if usuario_no == True %}
+    <span>Email o password, son incorrectos...Vuélve a intentarlo ó </span><a href="{{ url_for("registro") }}">regístrate.</a>
+    {% endif %}
+<br><br><br><br><br><br><br><br>
+    <div align="right">
+    <a href="{{ url_for("inicio") }}"><button class="btn btn-danger btn-lg">MENU PRINCIPAL</button> </a>
+    </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "layoutentrar.html" %}
+{% block content %}
+{% include "infosession.html" %}
+
+
+{% set abc = ["Q", "W", "E","R", "T", "Y", "U", "I",
+"O", "P", "A", "S", "D","F",  "G", "H", "J","K", "L",
+"Ñ", "Ç","Z", "X", "C", "V", "B", "N", "M"] %}
+
+<div class="container">
+    <div style="text-align: center;">
+
+        {% set x = "&nbsp;&nbsp;".join(palabracodificada)  %}
+        <h1 class="">{{ x |safe }}</h1>
+        <BR>
+        {{ palabra }}
+        <div><img src="{{ url_for("static", filename=("images/fase{0}.png".format( faseactual))) }}" width="339px"
+                height="310px"></div>
+        <br>
+
+        <form action="{{ url_for("recibirdatos_ahorcado_single") }}" method="POST">
+            <input type="hidden" name="nombre" value="{{ nombre }}">
+            <input type="hidden" name="email" value="{{ email }}">
+
+            {% for letra in abc %}
+            <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
+            {% if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
+            <br><br>
+            {% endif %}
+            {% endfor %}
+        </form>
+    </div>
+</div>
+<br><br><br>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{url_for("registrarpuntuacion_single")}}" method="post" autocomplete="off">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" name="opcion" value="enviar" class="close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{{ fraseganador|safe }}</h4>
+                </div>
+
+                <div class="modal-body">
+                        <h3>TU PUNTUACION ACTUAL!!</h3>
+                        <h3>{{ puntosactuales }}</h3>
+                        <h3>TU ANTERIOR PUNTUACION!!</h3>
+                        <H3>{{ puntuacion_single }}</H3>
+                        <h3>TU MEJOR PUNTUACION!!</h3>
+                        <h3>{{ record_single }}</h3>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="opcion" value="mostrarrankings" class="btn btn-default">Rankings</button>
+                    <button type="submit" name="opcion" value="enviar" class="btn btn-primary">Nueva Partida</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+<script type="text/javascript">
+
+    var vermodal = {% if vermensaje == True %}true{% else %} false{% endif %};
+
+    $(document).ready(function () {
+        if (vermodal) {
+            $('#basicModal').modal('toggle')
+        }
+
+    });
+</script>
+
+
+
+{% endblock %}

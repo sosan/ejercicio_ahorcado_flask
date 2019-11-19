@@ -1,0 +1,89 @@
+{% extends "layoutentrar.html" %}
+
+{% block head %}
+    {{ super() }}
+    <meta http-equiv="refresh" content="5">
+{% endblock %}
+{% block content %}
+{% include "infosession.html" %}
+
+<div class="container">
+<center>
+    <h1 class="container">AHORCADO MULTIPLAYER:</h1>
+{% if empezarjugar == True %}
+     <form action="{{ url_for("jugarmulti") }}" method="post">
+    <h1><button class="btn-success btn-lg" type="submit" name="empezar" value="1">   EMPEZAR A JUGAR    </button></h1>
+     </form>
+{% endif %}
+
+    <h1 class="container">ELIGE UN HUECO:</h1>
+
+    <form action="{{ url_for("recibir_huecosala") }}" method="post">
+
+        {% if hueco1 != "" %}
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+                <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled> {{ hueco1 }} </button></h1>
+                <h6 class="has-error">Esta bloqueado el HUECO1</h6>
+
+
+            </div>
+            <div class="col-lg-1">
+                <h1><button class="btn-warning btn-lg" type="submit" name="quitar" value="1"> X </button></h1>
+            </div>
+
+            </div>
+        </div>
+        {% else %}
+            <h1><button class="btn-success btn-lg" type="submit" name="hueco" value="1" ng-disabled="loading">HUECO 1 LIBRE</button></h1>
+        {% endif %}
+
+
+
+    {% if hueco2 != "" %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+
+            <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ hueco2 }}</button></h1>
+            <h6 class="has-error">Esta bloqueado el HUECO2</h6>
+         </div>
+            <div class="col-lg-1">
+                <h1><button class="btn-warning btn-lg" type="submit" name="quitar" value="2"> X </button></h1>
+            </div>
+
+            </div>
+        </div>
+    {% else %}
+            <h1><button class="btn-success btn-lg" type="submit" name="hueco" value="2">HUECO 2 LIBRE</button></h1>
+    {% endif %}
+
+
+    {% if hueco3 != "" %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+        <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ hueco3 }}</button></h1>
+        <h6 class="has-error">Esta bloqueado el HUECO3</h6>
+         </div>
+            <div class="col-lg-1">
+                <h1><button class="btn-warning btn-lg" type="submit" name="quitar" value="3"> X </button></h1>
+            </div>
+
+            </div>
+        </div>
+
+    {% else %}
+        <h1><button class="btn-success btn-lg" type="submit" name="hueco" value="3">HUECO 3 LIBRE</button></h1>
+    {% endif %}
+
+
+    </form>
+</center>
+</div>
+
+{% endblock %}

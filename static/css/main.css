@@ -1,0 +1,41 @@
+body{
+    background-color: #2d2f30;
+    color: #96928b;
+
+}
+
+.label-info {
+    background-color: #044a5f;
+    color: #96928b ;
+}
+
+.label-warning {
+    background-color: #65400d;
+    color: #96928b ;
+}
+
+
+
+.section {
+padding: 0.4rem 0.4rem;
+}
+
+
+.navbar-default {
+    /*background-color: #0da08a;*/
+    background-color: #454545;
+    border-color: #6f6f6f;
+}
+
+.navbar-default .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: white;
+
+}
+
+.navbar {
+    border-radius: 5px;
+}
