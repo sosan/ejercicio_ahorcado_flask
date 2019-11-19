@@ -10,7 +10,7 @@ class Ahorcado:
         self.faseactual = 1
         # self.palabra = ""
         # self.palabracodificada = ""
-        self.finalizado = False
+        # self.finalizado = False
         # self.puntuacion = 0
         # self.puntuacionAnterior = 0
         # self.puntuacionMaxima = 0
@@ -57,6 +57,15 @@ class Ahorcado:
                     ON ahorcado.usuarios_ahorcado.id=records_ahorcado.id_usuario
                     WHERE ahorcado.usuarios_ahorcado.email="{0}"
                     """.format(email)
+        strtemp = self.db.query(sql)
+        return strtemp[0]
+    
+    def getPalabraPuntuacion(self, letra):
+        
+        sql = """
+        select puntuacion from puntuacion_caracteres where palabra='{0}'
+        """.format(letra)
+    
         strtemp = self.db.query(sql)
         return strtemp[0]
 

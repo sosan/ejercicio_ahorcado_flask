@@ -93,3 +93,47 @@ create table sala
 
 
 insert into sala(hueco1, hueco2, hueco3, email_hueco1, email_hueco2, email_hueco3) values ('','','', '','','')
+
+
+create table puntuacion_caracteres
+(
+    id integer unsigned not null primary key auto_increment,
+    palabra varchar(1) not null,
+    puntuacion integer unsigned not null
+);
+
+
+insert into puntuacion_caracteres(palabra, puntuacion) values
+("q", 50),
+("w", 50),
+("e", 5),
+("r", 10),
+("t", 50),
+("y", 50),
+("u", 5),
+("i", 5),
+("o", 5),
+("p", 10),
+
+("a", 0),
+("s", 20),
+("d", 20),
+("f", 20),
+("g", 20),
+("h", 20),
+("j", 10),
+("k", 50),
+("l", 10),
+("ñ", 50),
+("ç", 50),
+
+("z", 50),
+("x", 50),
+("c", 10),
+("v", 10),
+("b", 10),
+("n", 10),
+("m", 10)
+
+;
+

@@ -500,9 +500,12 @@ def recibirdatos_ahorcado_single():
             vermensaje = True
         else:
             
-            
-            # sumamos 10 puntos
-            puntosactuales += 10
+            punto = ahor.getPalabraPuntuacion(letra)
+            if punto != None:
+                puntosactuales += punto
+            else:
+                # sumamos 10 puntos
+                puntosactuales += 10
 
 
 
