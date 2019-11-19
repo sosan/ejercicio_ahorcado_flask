@@ -8,12 +8,12 @@ class Ahorcado:
         self.db = Base_datos(hosting=host, usuario=usuario,
                              contraseña=password, basededatos=db)
         self.faseactual = 1
-        self.palabra = ""
-        self.palabracodificada = ""
+        # self.palabra = ""
+        # self.palabracodificada = ""
         self.finalizado = False
-        self.puntuacion = 0
-        self.puntuacionAnterior = 0
-        self.puntuacionMaxima = 0
+        # self.puntuacion = 0
+        # self.puntuacionAnterior = 0
+        # self.puntuacionMaxima = 0
 
     def getpalabra(self):
 
@@ -236,6 +236,12 @@ class Ahorcado:
 
         self.db.query(sql)
         self.db.query(sql2)
+
+    def changeStringWithReplace(self):
+        pass
+
+    # puntuaciones X, Z, mas puntos
+    # vocales....
 
     def changeString(self, posicion, letraEnviada, palabra):
         listaTemp = list(palabra)

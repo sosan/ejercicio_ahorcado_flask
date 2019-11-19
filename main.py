@@ -295,7 +295,8 @@ def jugarmulti():
     if encontrado == True:
         if palabracodificada.count("-") == 0:
             print("victoria")
-            ahor.finalizado = True
+            # ahor.finalizado = True
+            session["finalizado"] = True
             puntuacion += 100
 
             fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
@@ -317,6 +318,7 @@ def jugarmulti():
             # perdido
             print("perdido")
             faseactual += 1
+            session["finalizado"] = True
             vermensaje = True
             fraseganador = ahor.getfraseperdedor(puntosactuales, session["puntuacion_single"], session["record_single"])
             ahor.setpuntuacion(session["puntosactuales"], session["puntuacion_single"], session["record_single"],
@@ -373,8 +375,11 @@ def showahorcadosingle():
     if session["nuevo"] == True:
         session["nuevo"] = False
 
-        if ahor.finalizado == True:
-            ahor.finalizado = False
+
+        if session["finalizado"] == True:
+            session["finalizado"] = False
+        # if ahor.finalizado == True:
+        #     ahor.finalizado = False
 
         palabra = ahor.getpalabra()
         palabracodificada = ahor.ocultarPalabra(1, palabra)
@@ -455,11 +460,18 @@ def recibirdatos_ahorcado_single():
         return redirect(url_for("showahorcadosingle"))
 
     letra = request.form["opcionletra"]
+    palabracodificada = session["palabracodificada"]
+    
+    if (letra in palabracodificada):
+        print("palabra en codificacion")
+        return redirect(url_for("showahorcadosingle"))
+    
+    
     encontrado = False
     fraseganador = ""
     vermensaje = False
     palabra = session["palabra"]
-    palabracodificada = session["palabracodificada"]
+    
 
     faseactual = session["faseactual"]
     puntuacion = session["puntuacion_single"]
@@ -472,10 +484,14 @@ def recibirdatos_ahorcado_single():
                 i, palabra[i], palabracodificada)
             encontrado = True
 
+    # comprobamos que la palabra no este en la palabra codificada
+        
+
     if encontrado == True:
         if palabracodificada.count("-") == 0:
             print("victoria")
-            ahor.finalizado = True
+            # ahor.finalizado = True
+            session["finalizado"] = True
             puntuacion += 100
 
             fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
@@ -483,6 +499,8 @@ def recibirdatos_ahorcado_single():
 
             vermensaje = True
         else:
+            
+            
             # sumamos 10 puntos
             puntosactuales += 10
 
@@ -498,6 +516,7 @@ def recibirdatos_ahorcado_single():
             print("perdido")
             faseactual += 1
             vermensaje = True
+            session["finalizado"] = True
             fraseganador = ahor.getfraseperdedor(puntosactuales, session["puntuacion_single"], session["record_single"])
             ahor.setpuntuacion(session["puntosactuales"], session["puntuacion_single"], session["record_single"],
                                session["email"])
@@ -527,7 +546,9 @@ def registrarpuntuacion_single():
     if request.method == "GET":
         return redirect(url_for("inicioentrada"))
 
-    if session["faseactual"] >= 7:
+    
+    if session["finalizado"] == True:
+        session["finalizado"] = False
         session["nuevo"] = True
 
     if request.form["opcion"] == "mostrarrankings":
