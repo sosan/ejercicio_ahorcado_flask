@@ -177,6 +177,7 @@ def recibirTipoAhorcado():
 
     if request.form["tipoahorcado"] == "single":
         session["nuevo"] = True
+        session["finalizado"] = False
         session["faseactual"] = 1
         return redirect(url_for("showahorcadosingle"))
 
@@ -184,6 +185,7 @@ def recibirTipoAhorcado():
         session["nuevo"] = True
         session["faseactual"] = 1
         return redirect(url_for("ahorcadomulti_opciones"))
+
 
 #
 #
@@ -213,7 +215,6 @@ def ahorcadomulti_opciones():
     session["hueco2"] = huecos[1]
     session["hueco3"] = huecos[2]
 
-
     if huecos[0] != "" and huecos[1] != "" and huecos[2] != "":
         session["empezarjugar"] = True
     else:
@@ -236,7 +237,6 @@ def ahorcadomulti_opciones():
 
 @app.route("/ahorcadomultihueco", methods=["POST"])
 def recibir_huecosala():
-
     if "hueco" in request.form:
         ahor.sethuecos(request.form["hueco"], session["nombre"], session["email"])
 
@@ -248,7 +248,6 @@ def recibir_huecosala():
 
 @app.route("/ahorcadomulti", methods=["POST"])
 def jugarmulti():
-
     ####################
     # if not ("opcionletra" in request.form):
     #     return redirect(url_for("entrar"))
@@ -340,17 +339,6 @@ def jugarmulti():
     ####################
 
 
-
-
-
-
-
-
-
-
-
-
-
 @app.route("/ahorcadomulti", methods=["GET"])
 def recibirdatosmulti():
     return render_template("ahorcado_multi.html",
@@ -365,21 +353,16 @@ def recibirdatosmulti():
                            )
 
 
-
-
 @app.route("/ahorcadosingle", methods=["GET"])
 def showahorcadosingle():
-    if not ('email' in session) or     not ("nuevo" in session) or     not ("faseactual" in session):
+    if not ('email' in session) or not ("nuevo" in session) or not ("faseactual" in session):
         return redirect(url_for("inicio"))
 
     if session["nuevo"] == True:
         session["nuevo"] = False
 
-
         if session["finalizado"] == True:
             session["finalizado"] = False
-        # if ahor.finalizado == True:
-        #     ahor.finalizado = False
 
         palabra = ahor.getpalabra()
         palabracodificada = ahor.ocultarPalabra(1, palabra)
@@ -461,17 +444,15 @@ def recibirdatos_ahorcado_single():
 
     letra = request.form["opcionletra"]
     palabracodificada = session["palabracodificada"]
-    
+
     if (letra in palabracodificada):
         print("palabra en codificacion")
         return redirect(url_for("showahorcadosingle"))
-    
-    
+
     encontrado = False
     fraseganador = ""
     vermensaje = False
     palabra = session["palabra"]
-    
 
     faseactual = session["faseactual"]
     puntuacion = session["puntuacion_single"]
@@ -485,7 +466,6 @@ def recibirdatos_ahorcado_single():
             encontrado = True
 
     # comprobamos que la palabra no este en la palabra codificada
-        
 
     if encontrado == True:
         if palabracodificada.count("-") == 0:
@@ -499,7 +479,7 @@ def recibirdatos_ahorcado_single():
 
             vermensaje = True
         else:
-            
+
             punto = ahor.getPalabraPuntuacion(letra)
             if punto != None:
                 puntosactuales += punto
@@ -549,7 +529,6 @@ def registrarpuntuacion_single():
     if request.method == "GET":
         return redirect(url_for("inicioentrada"))
 
-    
     if session["finalizado"] == True:
         session["finalizado"] = False
         session["nuevo"] = True

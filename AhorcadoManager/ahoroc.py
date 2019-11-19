@@ -63,11 +63,11 @@ class Ahorcado:
     def getPalabraPuntuacion(self, letra):
         
         sql = """
-        select puntuacion from puntuacion_caracteres where palabra='{0}'
+        SELECT puntuacion from puntuacion_caracteres where palabra="{0}"
         """.format(letra)
     
         strtemp = self.db.query(sql)
-        return strtemp[0]
+        return strtemp[0][0]
 
     def getPuntuacionActual(self, email):
 
