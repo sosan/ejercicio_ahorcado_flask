@@ -185,7 +185,7 @@ def recibirTipoAhorcado():
         session["faseactual"] = 1
         session.pop("letraspulsadas")
         session["letraspulsadas"] = [""]
-        
+
         return redirect(url_for("showahorcadosingle"))
 
     elif request.form["tipoahorcado"] == "multi":
@@ -196,7 +196,7 @@ def recibirTipoAhorcado():
             ahor.vaciarhuecoplayer(session["email"])
             # if t is None:
             #     return redirect(url_for("inicioentrada"))
-            
+
         return redirect(url_for("ahorcadomulti_opciones"))
 
 
@@ -259,11 +259,8 @@ def recibir_huecosala():
     return redirect(url_for("ahorcadomulti_opciones"))
 
 
-
-
 @app.route("/ahorcadomulti", methods=["GET"])
 def recibirdatosmulti():
-    
     if not ('email' in session) or not ("nuevo" in session) or not ("faseactual" in session):
         return redirect(url_for("inicio"))
 
@@ -326,17 +323,12 @@ def recibirdatosmulti():
                                empezarjugar=session["empezarjugar"],
                                finalizado=session["finalizado"]
                                )
-    
-
 
 
 @app.route("/ahorcadomulti", methods=["POST"])
 def jugarmulti():
-
-
     ############################
     print("ahorcado multi post")
-
 
     ###########################
     return redirect(url_for("recibirdatosmulti"))
@@ -374,7 +366,6 @@ def showahorcadosingle():
         session["record_multi"] = puntuacion[2]
         session["puntuacion_multi"] = puntuacion[3]
         session["puntosactuales"] = 0
-        
 
         return render_template('ahorcadosingle.html',
                                nombre=session['nombre'],
@@ -393,13 +384,12 @@ def showahorcadosingle():
 
                                )
     else:
-        
+
         # TODO: BORRAR .... limpiar letraspulsadas, borrar....
         letraspulsadas = session["letraspulsadas"]
         letraspulsadas = list(dict.fromkeys(letraspulsadas))
         session["letraspulsadas"] = letraspulsadas
-        
-        
+
         return render_template("ahorcadosingle.html",
                                nombre=session["nombre"],
                                faseactual=session["faseactual"],
@@ -457,23 +447,18 @@ def recibirdatos_ahorcado_single():
     record_single = session["record_single"]
     puntosactuales = session["puntosactuales"]
     palabracodificadaantes = palabracodificada
-    
-    letraspulsadas:list = session["letraspulsadas"]
+
+    letraspulsadas: list = session["letraspulsadas"]
     letraspulsadas.append(letra)
     # limpiar letraspulsadas
     letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
-    
-    
-    
-    
+
     for i in range(0, len(palabra)):
         if palabra[i] == letra:
             palabracodificada = ahor.changeString(
                 i, palabra[i], palabracodificada)
             encontrado = True
-
-    
 
     if encontrado == True:
         if palabracodificada.count("-") == 0:
@@ -488,8 +473,6 @@ def recibirdatos_ahorcado_single():
 
             vermensaje = True
         else:
-            
-            
 
             punto = ahor.getPalabraPuntuacion(letra)
             if (letra in palabracodificadaantes):
@@ -528,8 +511,6 @@ def recibirdatos_ahorcado_single():
     session["puntuacion_single"] = puntuacion_single
     session["record_single"] = record_single
     session["puntosactuales"] = puntosactuales
-    
-
 
     return redirect(url_for("showahorcadosingle"))
 
@@ -556,8 +537,8 @@ def nuevapartida():
         return redirect(url_for("verrankings"))
     elif request.form["opcion"] == "enviar":
         return redirect(url_for("showahorcadosingle"))
-    
-    
+
+
 @app.route("/enviarsss", methods=["GET", "POST"])
 def nuevapartida_multi():
     if "finalizado" in session:
