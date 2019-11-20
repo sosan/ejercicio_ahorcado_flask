@@ -81,12 +81,13 @@ VALUES
 create table sala
 (
 	id integer unsigned not null primary key auto_increment,
-	hueco1 varchar(50),
-	hueco2 varchar(50),
-	hueco3 varchar(50),
-    email_hueco1 varchar(50),
-    email_hueco2 varchar(50),
-    email_hueco3 varchar(50)
+	hueco1 varchar(50), -- cambiar por nombre_usuario1
+	hueco2 varchar(50), -- cambiar por nombre_usuario2
+	hueco3 varchar(50), -- cambiar por nombre_usuario3
+    email_hueco1 varchar(50), -- id del usuario en el hueco1
+    email_hueco2 varchar(50), -- id del usuario en el hueco2
+    email_hueco3 varchar(50) -- id en el usuairo en el hueco3
+
 );
 
 

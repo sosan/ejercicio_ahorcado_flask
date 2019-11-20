@@ -29,7 +29,16 @@
             <input type="hidden" name="email" value="{{ email }}">
 
             {% for letra in abc %}
-            <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
+                {% for letrapulsada in letraspulsadas %}
+                    {% if letrapulsada == letra %}
+                    <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
+                    {% else %}
+                    <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
+                    {% endif %}
+
+                {% endfor %}
+            {% endfor %}
+
             {% if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
             <br><br>
             {% endif %}
