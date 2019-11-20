@@ -399,6 +399,13 @@ def showahorcadosingle():
 
                                )
     else:
+        
+        # TODO: BORRAR .... limpiar letraspulsadas, borrar....
+        letraspulsadas = session["letraspulsadas"]
+        letraspulsadas = list(dict.fromkeys(letraspulsadas))
+        session["letraspulsadas"] = letraspulsadas
+        
+        
         return render_template("ahorcadosingle.html",
                                nombre=session["nombre"],
                                faseactual=session["faseactual"],
@@ -459,7 +466,11 @@ def recibirdatos_ahorcado_single():
     
     letraspulsadas:list = session["letraspulsadas"]
     letraspulsadas.append(letra)
+    # limpiar letraspulsadas
+    letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
+    
+    
     
     
     for i in range(0, len(palabra)):

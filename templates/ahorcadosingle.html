@@ -27,21 +27,23 @@
         <form action="{{ url_for("recibirdatos_ahorcado_single") }}" method="POST">
             <input type="hidden" name="nombre" value="{{ nombre }}">
             <input type="hidden" name="email" value="{{ email }}">
-
+            {% set encontradopalabra = False %}
             {% for letra in abc %}
                 {% for letrapulsada in letraspulsadas %}
                     {% if letrapulsada == letra %}
-                    <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
-                    {% else %}
-                    <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
+                        <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
+                        {% set encontradopalabra = True %}
                     {% endif %}
 
                 {% endfor %}
-            {% endfor %}
+                {% if encontradopalabra == False %}
+                    <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
+                    {% set encontradopalabra = True %}
+                {% endif %}
 
-            {% if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
-            <br><br>
-            {% endif %}
+                {% if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
+                <br><br>
+                {% endif %}
             {% endfor %}
         </form>
     </div>
