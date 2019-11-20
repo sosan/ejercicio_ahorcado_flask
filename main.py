@@ -21,6 +21,10 @@ from lib.conexionMySQL import Base_datos
 from AhorcadoManager.ahoroc import Ahorcado as h
 
 app = Flask(__name__)
+# extension que añade break y continue en jinja
+# app.jinja_env.add_extension("jinja2.ext.loopcontrols")
+
+
 bootstrap = Bootstrap(app)
 app.secret_key = 'todoSuperSecreto'
 app.debug = True
@@ -179,6 +183,7 @@ def recibirTipoAhorcado():
         session["nuevo"] = True
         session["finalizado"] = False
         session["faseactual"] = 1
+        session.pop("letraspulsadas")
         session["letraspulsadas"] = [""]
         
         return redirect(url_for("showahorcadosingle"))
@@ -322,18 +327,7 @@ def recibirdatosmulti():
                                finalizado=session["finalizado"]
                                )
     
-    
-    
-    # return render_template("ahorcado_multi.html",
-    #                        nombre=session["nombre"],
-    #                        email=session["email"],
-    #                        ahorcadotipo="multi",
-    #                        puntuacion_multi=session["puntuacion_multi"],
-    #                        record_multi=session["record_multi"],
-    #                        entrada=False,
-    #                        empezarjugar=session["empezarjugar"]
 
-    #                        )
 
 
 @app.route("/ahorcadomulti", methods=["POST"])
@@ -550,6 +544,8 @@ def ahorcado_get():
 def nuevapartida():
     if "finalizado" in session:
         if session["finalizado"] == True:
+            session.pop("letraspulsadas")
+            session["letraspulsadas"] = [""]
             session["finalizado"] = False
             session["nuevo"] = True
 

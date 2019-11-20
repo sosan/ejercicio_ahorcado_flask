@@ -86,15 +86,18 @@ create table sala
 	hueco3 varchar(50), -- cambiar por nombre_usuario3
     email_hueco1 varchar(50), -- id del usuario en el hueco1
     email_hueco2 varchar(50), -- id del usuario en el hueco2
-    email_hueco3 varchar(50) -- id en el usuairo en el hueco3
-
+    email_hueco3 varchar(50), -- id en el usuairo en el hueco3
+    fase_hueco1 integer unsigned not null default 0,
+    fase_hueco2 integer unsigned not null default 0,
+    fase_hueco3 integer unsigned not null default 0
 );
 
 
 
 
-insert into sala(hueco1, hueco2, hueco3, email_hueco1, email_hueco2, email_hueco3) values ('','','', '','','')
-
+insert into sala(hueco1, hueco2, hueco3, email_hueco1, email_hueco2, email_hueco3) values 
+('','','', '','','')
+;
 
 create table puntuacion_caracteres
 (
