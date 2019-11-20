@@ -59,13 +59,13 @@ class Ahorcado:
                     """.format(email)
         strtemp = self.db.query(sql)
         return strtemp[0]
-    
+
     def getPalabraPuntuacion(self, letra):
-        
+
         sql = """
         SELECT puntuacion from puntuacion_caracteres where palabra="{0}"
         """.format(letra)
-    
+
         strtemp = self.db.query(sql)
         return strtemp[0][0]
 
@@ -85,51 +85,57 @@ class Ahorcado:
 
         return strtemp[0][0], strtemp[0][1], strtemp[0][2], strtemp[0][3]
 
-    def getfraseganador(self, puntosactuales, puntuacion_single, record_single):
+    def getfraseganador(self, puntosactuales, puntuacion_anterior, record):
 
         fraseganador = ["HAS GANADO!!<BR>"]
-        if puntosactuales > record_single:
+        if puntosactuales > record:
             fraseganador.append("Y HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
-        elif puntosactuales == record_single:
+        elif puntosactuales == record:
             fraseganador.append("UYYYY!! CASI MEJORAS TU MEJOR PUNTUACION!!!")
         else:
-            if puntosactuales > puntuacion_single:
+            if puntosactuales > puntuacion_anterior:
                 fraseganador.append("Y HAS MEJORADO TU ANTERIOR PUNTUACION!!!")
             else:
                 fraseganador.append("PERO NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
 
         return "".join(fraseganador)
 
-    def getfraseperdedor(self, puntosactuales, puntuacion_single, record_single):
+    def getfraseperdedor(self, puntosactuales, puntuacion_anterior, record):
 
         fraseganador = ["HAS PERDIDO!!<BR>"]
-        if puntosactuales > record_single:
+        if puntosactuales > record:
             fraseganador.append("PERO HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
-        elif puntosactuales == record_single:
+        elif puntosactuales == record:
             fraseganador.append("PERO CASI MEJORAS TU MEJOR PUNTUACION!!!")
         else:
-            if puntosactuales > puntuacion_single:
+            if puntosactuales > puntuacion_anterior:
                 fraseganador.append("PERO HAS MEJORADO TU ANTERIOR PUNTUACION!!!")
             else:
                 fraseganador.append("Y NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
 
         return "".join(fraseganador)
 
-    def setpuntuacion(self, puntuacionactual, puntuacion_anterior, record_single, email):
-        sql = """
-            SELECT id from ahorcado.usuarios_ahorcado where ahorcado.usuarios_ahorcado.email="{0}"
-        """.format(email)
-        datos = self.db.query(sql)
-        if len(datos) == 0:
+    def vaciarhuecoplayer(self, email):
+
+        if email is None or email == "":
             return None
 
-        id = datos[0][0]
+        sql = """
+        UPDATE ahorcado.usuarios_ahorcado
+        SET current_hueco = "" where email="{0}"
+        """.format(email)
+
+        self.db.query(sql)
+
+    def setpuntuacion(self, puntuacionactual, puntuacion_anterior, record_single, email):
+
+        id = self.getid(email)
         recordsingledb, puntuacionsingledb, recordmultidb, puntuacionmultidb = self.getPuntuacionActual(email)  # tupla
 
         sql = ""
         sql2 = ""
 
-        if puntuacionactual > record_single:
+        if puntuacionactual > recordsingledb:
             # update
             sql = """
             update ahorcado.records_ahorcado    
@@ -143,7 +149,7 @@ class Ahorcado:
                    ({0}, {1}, {2}, {3}, {4} )
                """.format(puntuacionactual, puntuacionactual, recordmultidb, puntuacionmultidb, id)
         else:
-            if puntuacionactual > puntuacion_anterior:
+            if puntuacionactual > puntuacionsingledb:
                 sql = """
                 update ahorcado.records_ahorcado    
                 set puntuacion_single={0}

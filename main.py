@@ -184,6 +184,11 @@ def recibirTipoAhorcado():
     elif request.form["tipoahorcado"] == "multi":
         session["nuevo"] = True
         session["faseactual"] = 1
+        if "email" in session:
+            e = ahor.vaciarhuecoplayer(session["email"])
+            if e is None:
+                return redirect(url_for("inicioentrada"))
+
         return redirect(url_for("ahorcadomulti_opciones"))
 
 
@@ -251,88 +256,6 @@ def jugarmulti():
     ####################
     # if not ("opcionletra" in request.form):
     #     return redirect(url_for("entrar"))
-
-    if not ("email" in session) \
-            or not ("nombre" in session) \
-            or not ("nuevo" in session) \
-            or not ("password" in session) \
-            or not ("puntuacion_multi" in session) \
-            or not ("faseactual" in session) \
-            or not ("puntuacion_single" in session) \
-            or not ("record_single" in session) \
-            or not ("record_multi" in session) \
-            or not ("puntosactuales" in session) \
-            or not ("palabra" in session) \
-            or not ("palabracodificada" in session) \
-            or not ("fraseganador" in session) \
-            or not ("vermensaje" in session) \
-            or not ("puntosactuales" in session):
-        return redirect(url_for("cerrarsesion"))
-
-    if session["faseactual"] >= 7:
-        session["nuevo"] = True
-        return redirect(url_for("showahorcadosingle"))
-
-    letra = request.form["opcionletra"]
-    encontrado = False
-    fraseganador = ""
-    vermensaje = False
-    palabra = session["palabra"]
-    palabracodificada = session["palabracodificada"]
-
-    faseactual = session["faseactual"]
-    puntuacion = session["puntuacion_single"]
-    record_single = session["record_single"]
-    puntosactuales = session["puntosactuales"]
-
-    for i in range(0, len(palabra)):
-        if palabra[i] == letra:
-            palabracodificada = ahor.changeString(
-                i, palabra[i], palabracodificada)
-            encontrado = True
-
-    if encontrado == True:
-        if palabracodificada.count("-") == 0:
-            print("victoria")
-            # ahor.finalizado = True
-            session["finalizado"] = True
-            puntuacion += 100
-
-            fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
-            p = ahor.setpuntuacion(puntuacion, session["record_single"])
-
-            vermensaje = True
-        else:
-            # sumamos 10 puntos
-            puntosactuales += 10
-
-
-
-    else:
-        if faseactual < 6:
-            faseactual += 1
-            # session["faseactual"] = faseactual
-
-        else:
-            # perdido
-            print("perdido")
-            faseactual += 1
-            session["finalizado"] = True
-            vermensaje = True
-            fraseganador = ahor.getfraseperdedor(puntosactuales, session["puntuacion_single"], session["record_single"])
-            ahor.setpuntuacion(session["puntosactuales"], session["puntuacion_single"], session["record_single"],
-                               session["email"])
-
-    session["nombre"] = request.form["nombre"]
-    session["faseactual"] = faseactual
-    session["palabra"] = palabra
-    session["palabracodificada"] = palabracodificada
-    session["email"] = request.form["email"]
-    session["fraseganador"] = fraseganador
-    session["vermensaje"] = vermensaje
-    session["puntuacion_single"] = puntuacion
-    session["record_single"] = record_single
-    session["puntosactuales"] = puntosactuales
 
     return redirect(url_for("recibirdatosmulti"))
 
@@ -412,7 +335,8 @@ def showahorcadosingle():
                                record_single=session["record_single"],
                                ahorcadotipo="single",
                                puntosactuales=session["puntosactuales"],
-                               jugando=True
+                               jugando=True,
+                               finalizado=session["finalizado"]
                                )
 
 
@@ -445,20 +369,16 @@ def recibirdatos_ahorcado_single():
     letra = request.form["opcionletra"]
     palabracodificada = session["palabracodificada"]
 
-    if (letra in palabracodificada):
-        print("palabra en codificacion")
-        return redirect(url_for("showahorcadosingle"))
-
     encontrado = False
     fraseganador = ""
     vermensaje = False
     palabra = session["palabra"]
 
     faseactual = session["faseactual"]
-    puntuacion = session["puntuacion_single"]
+    puntuacion_single = session["puntuacion_single"]
     record_single = session["record_single"]
     puntosactuales = session["puntosactuales"]
-
+    palabracodificadaantes = palabracodificada
     for i in range(0, len(palabra)):
         if palabra[i] == letra:
             palabracodificada = ahor.changeString(
@@ -472,20 +392,24 @@ def recibirdatos_ahorcado_single():
             print("victoria")
             # ahor.finalizado = True
             session["finalizado"] = True
-            puntuacion += 100
+            puntosactuales += 100
 
             fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
-            p = ahor.setpuntuacion(puntuacion, session["puntuacion_single"], session["record_single"], session["email"])
+            p = ahor.setpuntuacion(puntosactuales, session["puntuacion_single"], session["record_single"],
+                                   session["email"])
 
             vermensaje = True
         else:
 
             punto = ahor.getPalabraPuntuacion(letra)
+            if (letra in palabracodificadaantes):
+                punto = 0
+
             if punto != None:
                 puntosactuales += punto
             else:
-                # sumamos 10 puntos
-                puntosactuales += 10
+                # sumamos 5 puntos en caso de fallo
+                puntosactuales += 5
 
 
 
@@ -501,7 +425,7 @@ def recibirdatos_ahorcado_single():
             vermensaje = True
             session["finalizado"] = True
             fraseganador = ahor.getfraseperdedor(puntosactuales, session["puntuacion_single"], session["record_single"])
-            ahor.setpuntuacion(session["puntosactuales"], session["puntuacion_single"], session["record_single"],
+            ahor.setpuntuacion(puntosactuales, session["puntuacion_single"], session["record_single"],
                                session["email"])
 
     session["nombre"] = request.form["nombre"]
@@ -511,9 +435,10 @@ def recibirdatos_ahorcado_single():
     session["email"] = request.form["email"]
     session["fraseganador"] = fraseganador
     session["vermensaje"] = vermensaje
-    session["puntuacion_single"] = puntuacion
+    session["puntuacion_single"] = puntuacion_single
     session["record_single"] = record_single
     session["puntosactuales"] = puntosactuales
+
 
     return redirect(url_for("showahorcadosingle"))
 
@@ -524,14 +449,15 @@ def ahorcado_get():
     return redirect(url_for("entrar"))
 
 
-@app.route("/enviarss", methods=["POST"])
-def registrarpuntuacion_single():
+@app.route("/enviarss", methods=["GET", "POST"])
+def nuevapartida():
+    if "finalizado" in session:
+        if session["finalizado"] == True:
+            session["finalizado"] = False
+            session["nuevo"] = True
+
     if request.method == "GET":
         return redirect(url_for("inicioentrada"))
-
-    if session["finalizado"] == True:
-        session["finalizado"] = False
-        session["nuevo"] = True
 
     if request.form["opcion"] == "mostrarrankings":
         return redirect(url_for("verrankings"))
