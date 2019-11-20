@@ -12,12 +12,3 @@
 from main import *
 
 
-@app.route("/ahorcadomulti", methods=["POST"])
-def jugarmulti():
-    ####################
-    # if not ("opcionletra" in request.form):
-    #     return redirect(url_for("entrar"))
-
-    return redirect(url_for("recibirdatosmulti"))
-
-    ####################

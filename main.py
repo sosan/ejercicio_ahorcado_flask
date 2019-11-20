@@ -185,10 +185,10 @@ def recibirTipoAhorcado():
         session["nuevo"] = True
         session["faseactual"] = 1
         if "email" in session:
-            e = ahor.vaciarhuecoplayer(session["email"])
-            if e is None:
-                return redirect(url_for("inicioentrada"))
-
+            ahor.vaciarhuecoplayer(session["email"])
+            # if t is None:
+            #     return redirect(url_for("inicioentrada"))
+            
         return redirect(url_for("ahorcadomulti_opciones"))
 
 
@@ -265,6 +265,20 @@ def recibirdatosmulti():
                            empezarjugar=session["empezarjugar"]
 
                            )
+
+
+@app.route("/ahorcadomulti", methods=["POST"])
+def jugarmulti():
+
+
+    ############################
+
+
+
+    ###########################
+    return redirect(url_for("recibirdatosmulti"))
+
+    ####################
 
 
 @app.route("/ahorcadosingle", methods=["GET"])
@@ -454,6 +468,22 @@ def nuevapartida():
         return redirect(url_for("verrankings"))
     elif request.form["opcion"] == "enviar":
         return redirect(url_for("showahorcadosingle"))
+    
+    
+@app.route("/enviarsss", methods=["GET", "POST"])
+def nuevapartida_multi():
+    if "finalizado" in session:
+        if session["finalizado"] == True:
+            session["finalizado"] = False
+            session["nuevo"] = True
+
+    if request.method == "GET":
+        return redirect(url_for("inicioentrada"))
+
+    if request.form["opcion"] == "mostrarrankings":
+        return redirect(url_for("verrankings"))
+    elif request.form["opcion"] == "enviar":
+        return redirect(url_for("jugarmulti"))
 
 
 @app.route("/ahorcado", methods=["GET"])

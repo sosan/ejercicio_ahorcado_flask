@@ -10,6 +10,14 @@
 <div class="container">
     <div style="text-align: center;">
 
+
+        {% if finalizado == True %}
+        <form action="{{url_for("nuevapartida_multi")}}" method="post" autocomplete="off">
+            <button type="submit" name="opcion" value="enviar" class="btn-success btn-lg">Nueva Partida</button>
+        </form>
+        {% endif %}
+
+
         {% set x = "&nbsp;&nbsp;".join(palabracodificada)  %}
         <h1 class="">{{ x |safe }}</h1>
         <BR>
@@ -35,7 +43,7 @@
 
 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{url_for("registrarpuntuacion_single")}}" method="post" autocomplete="off">
+        <form action="{{url_for("nuevapartida_multi")}}" method="post" autocomplete="off">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="submit" name="opcion" value="enviar" class="close" aria-hidden="true">&times;</button>

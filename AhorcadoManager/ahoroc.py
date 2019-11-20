@@ -122,7 +122,7 @@ class Ahorcado:
 
         sql = """
         UPDATE ahorcado.usuarios_ahorcado
-        SET current_hueco = "" where email="{0}"
+        SET current_hueco=0 where email="{0}"
         """.format(email)
 
         self.db.query(sql)
