@@ -261,6 +261,7 @@ class Ahorcado:
         return palabra
 
     def getdificultad(self, dificultad):
+        print(dificultad)
         if dificultad == "esqueleto":
             return self.getdificultadDB(5)
         elif dificultad == "pulpo":
@@ -277,4 +278,4 @@ class Ahorcado:
         """.format(tipodificultad)
 
         datos = self.db.query(sql)
-        return datos[0]
+        return datos[0][0]

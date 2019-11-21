@@ -16,9 +16,18 @@ create table usuarios_ahorcado
 
 create table tipo_dificultad
 (
-    dificultad integer unsigned not null primary key,
+    dificultad integer unsigned not null,
     descripcion_dificultad varchar(50)
 )
+;
+
+insert into tipo_dificultad(dificultad, descripcion_dificultad)
+values
+  (0, "noelegido"),
+  (5, "esqueleto"),
+  (5, "pulpo"),
+  (4, "estrella"),
+  (3, "zombi")
 ;
 
 
@@ -77,14 +86,7 @@ VALUES
 (1000, 100, 2000, 200, 1)
 ;
 
-insert into tipo_dificultad(dificultad, descripcion_dificultad)
-values
-(0, "noelegido"),
-(5, "esqueleto"),
-(4, "pulpo"),
-(4, "estrella"),
-(3, "zombi")
-;
+
 
 
 INSERT INTO palabras_ahorcado(categoria, palabra)

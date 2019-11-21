@@ -371,7 +371,7 @@ def recibirdatos_ahorcado_single():
     
     dificultad = ahor.getdificultad(session["dificultad"])
 
-    if session["faseactual"] >= dificultad:
+    if session["faseactual"] >= 7:
         session["nuevo"] = True
         return redirect(url_for("showahorcadosingle"))
 
@@ -389,16 +389,14 @@ def recibirdatos_ahorcado_single():
     puntosactuales = session["puntosactuales"]
     palabracodificadaantes = palabracodificada
 
-    
-    
-    
+    letraspulsadas:set = {}
 
-    letraspulsadas: list = session["letraspulsadas"]
+    # letraspulsadas: list = session["letraspulsadas"]
     letraspulsadas.append(letra)
     # limpiar letraspulsadas de letras duplicadas
     # aunque no hace falta ya que se deshabilita el boton
     # TODO posiblemente se pueda borrar..
-    letraspulsadas = list(dict.fromkeys(letraspulsadas))
+    # letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
     
     

@@ -21,8 +21,8 @@
         <h1 class="">{{ x |safe }}</h1>
         <BR>
         {{ session["palabra"] }}
-        <div><img src="{{ url_for("static", filename=("images/{0}/fase{1}.png".format(session["dificultad"], session["faseactual"]))) }}" width="339px"
-                height="310px"></div>
+        <div><img src="{{ url_for("static", filename=("images/{0}/fase{1}.png".format(session["dificultad"], session["faseactual"]))) }}" 
+            width="339px" height="310px"></div>
         <br>
 
         <form action="{{ url_for("recibirdatos_ahorcado_single") }}" method="POST">
@@ -30,16 +30,17 @@
             <input type="hidden" name="email" value="{{ session["email"] }}">
 
             {% for letra in abc %}
-                {% set globalv = namespace(encontrado=False) %}
+                
+                {% set ns = namespace(e=false) %}
                 {% for letrapulsada in session["letraspulsadas"] %}
                     {% if letrapulsada == letra %}
                         <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
-                        {% set globalv.encontrado = True %}
+                        {% set ns.e = true %}
                         {% break %}
                     {% endif %}
 
                 {% endfor %}
-                {% if globalv.encontrado == False %}
+                {% if ns.e == false %}
                     <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
                 {% endif %}
 
