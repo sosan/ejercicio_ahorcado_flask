@@ -81,9 +81,9 @@ VALUES
 create table sala
 (
 	id integer unsigned not null primary key auto_increment,
-	hueco1 varchar(50), -- cambiar por nombre_usuario1
-	hueco2 varchar(50), -- cambiar por nombre_usuario2
-	hueco3 varchar(50), -- cambiar por nombre_usuario3
+	apodo_hueco1 varchar(50),
+	apodo_hueco2 varchar(50),
+	apodo_hueco3 varchar(50),
     email_hueco1 varchar(50), -- id del usuario en el hueco1
     email_hueco2 varchar(50), -- id del usuario en el hueco2
     email_hueco3 varchar(50), -- id en el usuairo en el hueco3
@@ -92,10 +92,7 @@ create table sala
     fase_hueco3 integer unsigned not null default 0
 );
 
-
-
-
-insert into sala(hueco1, hueco2, hueco3, email_hueco1, email_hueco2, email_hueco3) values 
+insert into sala(apodo_hueco1, apodo_hueco2, apodo_hueco3, email_hueco1, email_hueco2, email_hueco3) values
 ('','','', '','','')
 ;
 

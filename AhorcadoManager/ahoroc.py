@@ -181,7 +181,7 @@ class Ahorcado:
         #     raise Exception("nninooo")
 
         sql = """
-        SELECT hueco1, hueco2, hueco3 FROM sala
+        SELECT apodo_hueco1, apodo_hueco1, apodo_hueco1 FROM sala
         """
 
         datos = self.db.query(sql)
