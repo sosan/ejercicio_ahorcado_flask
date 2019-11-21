@@ -15,7 +15,7 @@ from flask import url_for
 from flask import session
 from flask_bootstrap import Bootstrap
 
-from lib.conexionMySQL import Base_datos
+from libo.conexionMySQL import Base_datos
 from AhorcadoManager.ahoroc import Ahorcado as h
 
 app = Flask(__name__)
@@ -125,6 +125,17 @@ def registro():
         leer_email = bd.query(
             f'INSERT INTO ahorcado.usuarios_ahorcado VALUES(null,"{nombre}","{email}","{password}",1)'
         )
+
+        datos = bd.query(f'SELECT id FROM ahorcado.usuarios_ahorcado WHERE email="{email}"')
+        idusuario = datos[0][0]
+
+        bd.query(
+            """
+            INSERT INTO ahorcado.records_ahorcado(id_usuario) 
+            VALUES({0})
+            """.format(idusuario)
+            )
+
         return redirect(url_for('login'))
 
     return render_template('registro.html')
@@ -172,8 +183,10 @@ def recibirTipoAhorcado():
         session["faseactual"] = 1
         # session.pop("letraspulsadas")
         session["letraspulsadas"] = [""]
+        
+        return redirect(url_for("elegirdificultad"))
 
-        return redirect(url_for("showahorcadosingle"))
+        # return redirect(url_for("showahorcadosingle"))
 
     elif request.form["tipoahorcado"] == "multi":
         session["nuevo"] = True
@@ -186,6 +199,27 @@ def recibirTipoAhorcado():
 
         return redirect(url_for("ahorcadomulti_opciones"))
 
+
+@app.route("/elegirdificultad", methods=["GET"])
+def elegirdificultad():
+    return render_template("elegirdificultad_single.html")
+
+@app.route("/recibir_dificultad", methods=["POST"])
+def recibir_dificultad():
+    
+    if request.form["opciondificultad"] == "esqueleto":
+        session["dificultad"] = "esqueleto"
+    elif request.form["opciondificultad"] == "pulpo":
+        session["dificultad"] = "pulpo"
+    elif request.form["opciondificultad"] == "estrella":
+        session["dificultad"] = "estrella"
+    else:
+        # TODO sospechoso
+        return redirect(url_for("inicioentrada"))
+    
+    return redirect(url_for("showahorcadosingle"))
+    
+    
 
 @app.route("/ahorcadomulti_opciones", methods=["GET"])
 def ahorcadomulti_opciones():
@@ -203,19 +237,7 @@ def ahorcadomulti_opciones():
     else:
         session["empezarjugar"] = False
 
-    return render_template("ahorcadomulti_opciones.html",
-                           # nombre=session["nombre"],
-                           # email=session["email"],
-                           ahorcadotipo="multi",
-                           # puntuacion_multi=session["puntuacion_multi"],
-                           # record_multi=session["record_multi"],
-                           # hueco1=session["hueco1"],
-                           # hueco2=session["hueco2"],
-                           # hueco3=session["hueco3"],
-                           entrada=False
-                           # empezarjugar=session["empezarjugar"]
-
-                           )
+    return render_template("ahorcadomulti_opciones.html",  ahorcadotipo="multi",  entrada=False)
 
 
 @app.route("/ahorcadomultihueco", methods=["POST"])
@@ -346,8 +368,10 @@ def recibirdatos_ahorcado_single():
 
     # comprobamos que session no le falte ningun campo
     comprobarsession()
+    
+    dificultad = ahor.getdificultad(session["dificultad"])
 
-    if session["faseactual"] >= 7:
+    if session["faseactual"] >= dificultad:
         session["nuevo"] = True
         return redirect(url_for("showahorcadosingle"))
 
@@ -365,6 +389,10 @@ def recibirdatos_ahorcado_single():
     puntosactuales = session["puntosactuales"]
     palabracodificadaantes = palabracodificada
 
+    
+    
+    
+
     letraspulsadas: list = session["letraspulsadas"]
     letraspulsadas.append(letra)
     # limpiar letraspulsadas de letras duplicadas
@@ -372,6 +400,8 @@ def recibirdatos_ahorcado_single():
     # TODO posiblemente se pueda borrar..
     letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
+    
+    
 
     for i in range(0, len(palabra)):
         if palabra[i] == letra:
@@ -406,7 +436,7 @@ def recibirdatos_ahorcado_single():
         # fallamos. la letra pulsada no esta dentro de la palabra
         # si la fase no es 6, error y sumamos una fase
         # sino es que hemos perdido totalmente...OOOHHH!!
-        if faseactual < 6:
+        if faseactual <= dificultad:
             faseactual += 1
             # session["faseactual"] = faseactual
 

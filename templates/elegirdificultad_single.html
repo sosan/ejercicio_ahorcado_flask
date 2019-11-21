@@ -1,0 +1,30 @@
+{% extends "layoutentrar.html" %}
+{% block content %}
+{% include "infosession.html" %}
+
+<div class="container">
+    <center>
+        <h1 class="container">ELIGE DIFICULTAD:</h1>
+        <form action="{{ url_for("recibir_dificultad") }}" method="post">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-5">
+                       <img src="{{ url_for("static", filename="images/esqueleto.png") }}"> 
+                        <h1><button class="btn-danger btn-lg" type="submit" name="opciondificultad" value="esqueleto">ELEGIR DIFICULTAD</button></h1>
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="{{ url_for("static", filename="images/pulpo.png") }}">
+                        <h1><button class="btn-danger btn-lg" type="submit" name="opciondificultad" value="pulpo">ELEGIR DIFICULTAD</button></h1>
+                    </div>
+                    <div class="col-lg-1">
+                        <img src="{{ url_for("static", filename="images/estrella.png") }}">
+                        <h1><button class="btn-danger btn-lg" type="submit" name="opciondificultad" value="estrella">ELEGIR DIFICULTAD</button></h1>
+                    </div>
+            
+                </div>
+
+        </form>
+
+    </center>
+</div>
+{% endblock %}

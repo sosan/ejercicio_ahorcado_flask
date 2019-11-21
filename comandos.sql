@@ -8,9 +8,20 @@ create table usuarios_ahorcado
     email varchar(50),
     clave varchar(50),
     current_hueco integer unsigned not null default 0
-
+    
 
 );
+
+
+
+create table tipo_dificultad
+(
+    dificultad integer unsigned not null primary key,
+    descripcion_dificultad varchar(50)
+)
+;
+
+
 
 create table records_ahorcado
 (
@@ -37,7 +48,6 @@ create table historico_puntuacion
 );
 
 
-alter table records_ahorcado add constraint fk_id_usuario foreign key (id_usuario) references usuarios_ahorcado(id);
 
 create table palabras_ahorcado
 (
@@ -65,6 +75,15 @@ VALUES
 INSERT INTO historico_puntuacion(record_single, puntuacion_single, record_multi, puntuacion_multi, id_usuario)
 VALUES
 (1000, 100, 2000, 200, 1)
+;
+
+insert into tipo_dificultad(dificultad, descripcion_dificultad)
+values
+(0, "noelegido"),
+(5, "esqueleto"),
+(4, "pulpo"),
+(4, "estrella"),
+(3, "zombi")
 ;
 
 
@@ -138,4 +157,7 @@ values
 ('m', 10)
 
 ;
+
+alter table records_ahorcado add constraint fk_id_usuario foreign key (id_usuario) references usuarios_ahorcado(id);
+
 

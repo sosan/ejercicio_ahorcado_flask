@@ -21,7 +21,7 @@
         <h1 class="">{{ x |safe }}</h1>
         <BR>
         {{ session["palabra"] }}
-        <div><img src="{{ url_for("static", filename=("images/fase{0}.png".format( session["faseactual"]))) }}" width="339px"
+        <div><img src="{{ url_for("static", filename=("images/{0}/fase{1}.png".format(session["dificultad"], session["faseactual"]))) }}" width="339px"
                 height="310px"></div>
         <br>
 
@@ -30,16 +30,16 @@
             <input type="hidden" name="email" value="{{ session["email"] }}">
 
             {% for letra in abc %}
-                {% set ns = namespace(e=false) %}
+                {% set globalv = namespace(encontrado=False) %}
                 {% for letrapulsada in session["letraspulsadas"] %}
                     {% if letrapulsada == letra %}
                         <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
-                        {% set ns.e = True %}
+                        {% set globalv.encontrado = True %}
                         {% break %}
                     {% endif %}
 
                 {% endfor %}
-                {% if ns.e == False %}
+                {% if globalv.encontrado == False %}
                     <button class="btn btn-success btn-lg" type="submit" name="opcionletra" value="{{ letra }}">{{ letra }}</button>
                 {% endif %}
 

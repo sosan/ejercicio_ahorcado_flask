@@ -10,7 +10,7 @@
 <div class="container">
 <center>
     <h1 class="container">AHORCADO MULTIPLAYER:</h1>
-{% if empezarjugar == True %}
+{% if session["empezarjugar"] == True %}
      <form action="{{ url_for("jugarmulti") }}" method="post">
     <h1><button class="btn-success btn-lg" type="submit" name="empezar" value="1">   EMPEZAR A JUGAR    </button></h1>
      </form>
@@ -20,12 +20,12 @@
 
     <form action="{{ url_for("recibir_huecosala") }}" method="post">
 
-        {% if hueco1 != "" %}
+        {% if session["hueco1"] != "" %}
             <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-5"></div>
             <div class="col-lg-2">
-                <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled> {{ hueco1 }} </button></h1>
+                <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled> {{ session["hueco1"] }} </button></h1>
                 <h6 class="has-error">Esta bloqueado el HUECO1</h6>
 
 
@@ -42,13 +42,13 @@
 
 
 
-    {% if hueco2 != "" %}
+    {% if session["hueco2"] != "" %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-5"></div>
             <div class="col-lg-2">
 
-            <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ hueco2 }}</button></h1>
+            <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ session["hueco2"] }}</button></h1>
             <h6 class="has-error">Esta bloqueado el HUECO2</h6>
          </div>
             <div class="col-lg-1">
@@ -62,12 +62,12 @@
     {% endif %}
 
 
-    {% if hueco3 != "" %}
+    {% if session["hueco3"] != "" %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-5"></div>
             <div class="col-lg-2">
-        <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ hueco3 }}</button></h1>
+        <h1><button class="btn-danger btn-lg" type="submit" name="hueco" value="bloqueado" disabled>{{ session["hueco3"] }}</button></h1>
         <h6 class="has-error">Esta bloqueado el HUECO3</h6>
          </div>
             <div class="col-lg-1">

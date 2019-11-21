@@ -1,5 +1,5 @@
 import pymysql
-from lib.conexionMySQL import Base_datos
+from libo.conexionMySQL import Base_datos
 import random
 
 
@@ -8,7 +8,6 @@ class Ahorcado:
         self.db = Base_datos(hosting=host, usuario=usuario,
                              contraseña=password, basededatos=db)
         self.faseactual = 1
-
 
     def getpalabra(self):
 
@@ -84,14 +83,16 @@ class Ahorcado:
 
         fraseganador = ["HAS GANADO!!<BR>"]
         if puntosactuales > record:
-            fraseganador.append("Y HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
+            fraseganador.append(
+                "Y HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
         elif puntosactuales == record:
             fraseganador.append("UYYYY!! CASI MEJORAS TU MEJOR PUNTUACION!!!")
         else:
             if puntosactuales > puntuacion_anterior:
                 fraseganador.append("Y HAS MEJORADO TU ANTERIOR PUNTUACION!!!")
             else:
-                fraseganador.append("PERO NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
+                fraseganador.append(
+                    "PERO NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
 
         return "".join(fraseganador)
 
@@ -99,14 +100,17 @@ class Ahorcado:
 
         fraseganador = ["HAS PERDIDO!!<BR>"]
         if puntosactuales > record:
-            fraseganador.append("PERO HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
+            fraseganador.append(
+                "PERO HAS MEJORADO TU MEJOR PUNTUACION!!!<BR>QUE CRACK!!!")
         elif puntosactuales == record:
             fraseganador.append("PERO CASI MEJORAS TU MEJOR PUNTUACION!!!")
         else:
             if puntosactuales > puntuacion_anterior:
-                fraseganador.append("PERO HAS MEJORADO TU ANTERIOR PUNTUACION!!!")
+                fraseganador.append(
+                    "PERO HAS MEJORADO TU ANTERIOR PUNTUACION!!!")
             else:
-                fraseganador.append("Y NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
+                fraseganador.append(
+                    "Y NO HAS MEJORADO TU PUNTUACION ANTERIOR!!!")
 
         return "".join(fraseganador)
 
@@ -125,7 +129,8 @@ class Ahorcado:
     def setpuntuacion(self, puntuacionactual, puntuacion_anterior, record_single, email):
 
         id = self.getid(email)
-        recordsingledb, puntuacionsingledb, recordmultidb, puntuacionmultidb = self.getPuntuacionActual(email)  # tupla
+        recordsingledb, puntuacionsingledb, recordmultidb, puntuacionmultidb = self.getPuntuacionActual(
+            email)  # tupla
 
         sql = ""
         sql2 = ""
@@ -175,13 +180,8 @@ class Ahorcado:
 
     def erroreshuecos(self):
 
-        # id = self.getid(email)
-
-        # if id == None:
-        #     raise Exception("nninooo")
-
         sql = """
-        SELECT apodo_hueco1, apodo_hueco1, apodo_hueco1 FROM sala
+        SELECT apodo_hueco1, apodo_hueco2, apodo_hueco3 FROM sala
         """
 
         datos = self.db.query(sql)
@@ -204,7 +204,7 @@ class Ahorcado:
         sql2 = ""
         if numerohueco == "1":
             sql = """
-                    UPDATE ahorcado.sala SET sala.hueco1 = '{0}'  WHERE sala.id = 1
+                    UPDATE ahorcado.sala SET sala.apodo_hueco1 = '{0}'  WHERE sala.id = 1
                     """.format(nombre)
             sql2 = """
             UPDATE ahorcado.usuarios_ahorcado SET usuarios_ahorcado.current_hueco = 1 where email='{0}'
@@ -213,7 +213,7 @@ class Ahorcado:
 
         elif numerohueco == "2":
             sql = """
-                UPDATE ahorcado.sala SET sala.hueco2 = '{0}' WHERE sala.id = 1
+                UPDATE ahorcado.sala SET sala.apodo_hueco2 = '{0}' WHERE sala.id = 1
                 """.format(nombre)
 
             sql2 = """
@@ -222,7 +222,7 @@ class Ahorcado:
 
         elif numerohueco == "3":
             sql = """
-            UPDATE ahorcado.sala SET sala.hueco3 = '{0}' WHERE sala.id = 1
+            UPDATE ahorcado.sala SET sala.apodo_hueco3 = '{0}' WHERE sala.id = 1
             """.format(nombre)
             sql2 = """
             UPDATE ahorcado.usuarios_ahorcado SET usuarios_ahorcado.current_hueco = 2 where email='{0}'
@@ -235,11 +235,11 @@ class Ahorcado:
         sql = ""
         sql2 = ""
         if numerohueco == "1":
-            sql = """  UPDATE ahorcado.sala SET sala.hueco1 = ''  WHERE sala.id = 1 """
+            sql = """  UPDATE ahorcado.sala SET sala.apodo_hueco1 = ''  WHERE sala.id = 1 """
         elif numerohueco == "2":
-            sql = """  UPDATE ahorcado.sala SET sala.hueco2 = '' WHERE sala.id = 1   """
+            sql = """  UPDATE ahorcado.sala SET sala.apodo_hueco2 = '' WHERE sala.id = 1   """
         elif numerohueco == "3":
-            sql = """ UPDATE ahorcado.sala SET sala.hueco3 = '' WHERE sala.id = 1 """
+            sql = """ UPDATE ahorcado.sala SET sala.apodo_hueco3 = '' WHERE sala.id = 1 """
 
         sql2 = """ UPDATE ahorcado.usuarios_ahorcado SET usuarios_ahorcado.current_hueco = 0 where email='{0}'  """.format(
             email)
@@ -259,3 +259,22 @@ class Ahorcado:
         palabra = "".join(listaTemp)
 
         return palabra
+
+    def getdificultad(self, dificultad):
+        if dificultad == "esqueleto":
+            return self.getdificultadDB(5)
+        elif dificultad == "pulpo":
+            return self.getdificultadDB(4)
+        elif dificultad == "estrella":
+            return self.getdificultadDB(4)
+        else:
+            raise Exception("valores no validos")
+
+    def getdificultadDB(self, tipodificultad):
+        sql = """
+        SELECT dificultad from tipo_dificultad
+        where dificultad={0}
+        """.format(tipodificultad)
+
+        datos = self.db.query(sql)
+        return datos[0]
