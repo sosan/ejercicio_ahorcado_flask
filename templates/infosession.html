@@ -4,37 +4,37 @@
     {% if ahorcadotipo == "single" %}
         <div class="col-md-5">
             <div class="pull-left">
-            <h4><span class="label label-info">Puntuacion Anterior: {{ puntuacion_single }}</span></h4>
-            <h4><span class="label label-info">Record: {{ record_single }}</span></h4>
+            <h4><span class="label label-info">Puntuacion Anterior: {{ session["puntuacion_single"] }}</span></h4>
+            <h4><span class="label label-info">Record: {{ session["record_single"] }}</span></h4>
         </div>
         </div>
-        <div class="col-md-3"><h3>PUNTOS {{ puntosactuales }}</h3></div>
+        <div class="col-md-3"><h3>PUNTOS {{ session["puntosactuales"] }}</h3></div>
         <div class="col-md-4"></div>
     {% elif ahorcadotipo == "multi" %}
         <div class="col-md-4"></div>
         {% if puntosactuales %}
-        <div class="col-md-3"><h3>PUNTOS {{ puntosactuales }}</h3></div>
+        <div class="col-md-3"><h3>PUNTOS {{ session["puntosactuales"] }}</h3></div>
             {% else %}
             <div class="col-md-3"></div>
             {% endif %}
         <div class="col-md-5">
             <div class="pull-right">
-                <h4><span class="label label-warning">Multiplayer - Puntuacion Anterior: {{ puntuacion_multi }}</span></h4>
-                <h4><span class="label label-warning">Multiplayer - Record: {{ record_multi }}</span></h4>
+                <h4><span class="label label-warning">Multiplayer - Puntuacion Anterior: {{ session["puntuacion_multi"] }}</span></h4>
+                <h4><span class="label label-warning">Multiplayer - Record: {{ session["record_multi"] }}</span></h4>
             </div>
         </div>
     {% elif ahorcadotipo == "" %}
         <div class="col-md-5">
             <div class="pull-left">
-                <h4><span class="label label-info">Puntuacion Anterior: {{ puntuacion_single }}</span></h4>
-                <h4><span class="label label-info">Record: {{ record_single }}</span></h4>
+                <h4><span class="label label-info">Puntuacion Anterior: {{ session["puntuacion_single"] }}</span></h4>
+                <h4><span class="label label-info">Record: {{ session["record_single"] }}</span></h4>
             </div>
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="pull-right">
-                <h4><span class="label label-warning">Multiplayer - Puntuacion: {{ puntuacion_multi }}</span></h4>
-                <h4><span class="label label-warning">Multiplayer - Record: {{ record_multi }}</span></h4>
+                <h4><span class="label label-warning">Multiplayer - Puntuacion: {{ session["puntuacion_multi"] }}</span></h4>
+                <h4><span class="label label-warning">Multiplayer - Record: {{ session["record_multi"] }}</span></h4>
             </div>
 
         </div>

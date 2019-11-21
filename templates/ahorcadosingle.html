@@ -17,24 +17,25 @@
             </form>
         {% endif %}
 
-        {% set x = "&nbsp;&nbsp;".join(palabracodificada)  %}
+        {% set x = "&nbsp;&nbsp;".join(session["palabracodificada"])  %}
         <h1 class="">{{ x |safe }}</h1>
         <BR>
-        {{ palabra }}
-        <div><img src="{{ url_for("static", filename=("images/fase{0}.png".format( faseactual))) }}" width="339px"
+        {{ session["palabra"] }}
+        <div><img src="{{ url_for("static", filename=("images/fase{0}.png".format( session["faseactual"]))) }}" width="339px"
                 height="310px"></div>
         <br>
 
         <form action="{{ url_for("recibirdatos_ahorcado_single") }}" method="POST">
-            <input type="hidden" name="nombre" value="{{ nombre }}">
-            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="nombre" value="{{ session["nombre"] }}">
+            <input type="hidden" name="email" value="{{ session["email"] }}">
 
             {% for letra in abc %}
                 {% set ns = namespace(e=false) %}
-                {% for letrapulsada in letraspulsadas %}
+                {% for letrapulsada in session["letraspulsadas"] %}
                     {% if letrapulsada == letra %}
                         <button class="btn btn-danger btn-lg" type="submit" name="opcionletra" value="{{ letra }}" disabled>{{ letra }}</button>
                         {% set ns.e = True %}
+                        {% break %}
                     {% endif %}
 
                 {% endfor %}
@@ -58,16 +59,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="submit" name="opcion" value="enviar" class="close" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">{{ fraseganador|safe }}</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{ session["fraseganador"]|safe }}</h4>
                 </div>
 
                 <div class="modal-body">
                         <h3>TU PUNTUACION ACTUAL!!</h3>
-                        <h3>{{ puntosactuales }}</h3>
+                        <h3>{{ session["puntosactuales"] }}</h3>
                         <h3>TU ANTERIOR PUNTUACION!!</h3>
-                        <H3>{{ puntuacion_single }}</H3>
+                        <H3>{{ session["puntuacion_single"] }}</H3>
                         <h3>TU MEJOR PUNTUACION!!</h3>
-                        <h3>{{ record_single }}</h3>
+                        <h3>{{ session["record_single"] }}</h3>
 
                 </div>
                 <div class="modal-footer">
@@ -88,7 +89,7 @@
     {{ super() }}
 <script type="text/javascript">
 
-    var vermodal = {% if vermensaje == True %}true{% else %} false{% endif %};
+    var vermodal = {% if session["vermensaje"] == True %}true{% else %} false{% endif %};
 
     $(document).ready(function () {
         if (vermodal) {

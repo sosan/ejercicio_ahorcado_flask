@@ -2,17 +2,14 @@
 
 {% block content %}
 
-    <h1>Bienvenido {{ nombre }}</h1>
+    <h1>Bienvenido {{ session["nombre"] }}</h1>
 {% include "infosession.html" %}
     <div class="container" style="padding-top: 3rem;">
         <center>
             <h1 class="container"> Elige que ahorcado quieres jugar:</h1>
         <form action="{{ url_for("recibirTipoAhorcado") }}" method="post">
             <h1><button class="btn-success btn-lg" type="submit" name="tipoahorcado" value="single">AHORCADO 1 JUGADOR</button></h1>
-
-            <h1>
-                <button class="btn-success btn-lg" type="submit" name="tipoahorcado" value="multi">AHORCADO MULTIPLAYER COMPETITIVO (AHORCA-NITE)</button>
-                </h1>
+            <h1><button class="btn-success btn-lg" type="submit" name="tipoahorcado" value="multi">AHORCADO MULTIPLAYER COMPETITIVO (AHORCA-NITE)</button></h1>
         </form>
         </center>
     </div>

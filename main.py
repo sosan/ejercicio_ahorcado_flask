@@ -10,20 +10,17 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask import redirect, url_for
+from flask import redirect
+from flask import url_for
 from flask import session
-from flask import make_response
 from flask_bootstrap import Bootstrap
-import threading
-import atexit
 
 from lib.conexionMySQL import Base_datos
 from AhorcadoManager.ahoroc import Ahorcado as h
 
 app = Flask(__name__)
 # extension que añade break y continue en jinja
-# app.jinja_env.add_extension("jinja2.ext.loopcontrols")
-
+app.jinja_env.add_extension("jinja2.ext.loopcontrols")
 
 bootstrap = Bootstrap(app)
 app.secret_key = 'todoSuperSecreto'
@@ -161,17 +158,7 @@ def inicioentrada():
     session["puntuacion_single"] = datos[6]
     session["record_multi"] = datos[7]
     session["puntuacion_multi"] = datos[8]
-
-    return render_template("entrar.html",
-                           nombre=session["nombre"],
-                           email=session["email"],
-                           ahorcadotipo="",
-                           puntuacion_single=session["puntuacion_single"],
-                           record_single=session["record_single"],
-                           puntuacion_multi=session["puntuacion_multi"],
-                           record_multi=session["record_multi"],
-                           entrada=True
-                           )
+    return render_template("entrar.html", ahorcadotipo="", entrada=True)
 
 
 @app.route("/ahorcadox", methods=["POST", "GET"])
@@ -183,7 +170,7 @@ def recibirTipoAhorcado():
         session["nuevo"] = True
         session["finalizado"] = False
         session["faseactual"] = 1
-        session.pop("letraspulsadas")
+        # session.pop("letraspulsadas")
         session["letraspulsadas"] = [""]
 
         return redirect(url_for("showahorcadosingle"))
@@ -199,23 +186,6 @@ def recibirTipoAhorcado():
 
         return redirect(url_for("ahorcadomulti_opciones"))
 
-
-#
-#
-# # lock to control access to variable
-# dataLock = threading.Lock()
-# # thread handler
-# yourThread = threading.Thread()
-# from time import sleep
-# from concurrent.futures import ThreadPoolExecutor
-# executor = ThreadPoolExecutor(1)
-
-# def thread_ahorcadomulti_opciones():
-#     #
-#     global yourThread
-#     # with dataLock:
-#     yourThread = threading.Timer(1, ahorcadomulti_opciones, ())
-#     yourThread.start()
 
 @app.route("/ahorcadomulti_opciones", methods=["GET"])
 def ahorcadomulti_opciones():
@@ -234,16 +204,16 @@ def ahorcadomulti_opciones():
         session["empezarjugar"] = False
 
     return render_template("ahorcadomulti_opciones.html",
-                           nombre=session["nombre"],
-                           email=session["email"],
+                           # nombre=session["nombre"],
+                           # email=session["email"],
                            ahorcadotipo="multi",
-                           puntuacion_multi=session["puntuacion_multi"],
-                           record_multi=session["record_multi"],
-                           hueco1=session["hueco1"],
-                           hueco2=session["hueco2"],
-                           hueco3=session["hueco3"],
-                           entrada=False,
-                           empezarjugar=session["empezarjugar"]
+                           # puntuacion_multi=session["puntuacion_multi"],
+                           # record_multi=session["record_multi"],
+                           # hueco1=session["hueco1"],
+                           # hueco2=session["hueco2"],
+                           # hueco3=session["hueco3"],
+                           entrada=False
+                           # empezarjugar=session["empezarjugar"]
 
                            )
 
@@ -290,21 +260,7 @@ def recibirdatosmulti():
         session["puntuacion_multi"] = puntuacion[3]
         session["puntosactuales"] = 0
 
-        return render_template('ahorcadosingle.html',
-                               nombre=session['nombre'],
-                               email=session['email'],
-                               faseactual=session["faseactual"],
-                               palabra=palabra,
-                               palabracodificada=palabracodificada,
-                               record_single=puntuacion[0],
-                               puntuacion_single=puntuacion[1],
-                               record_multi=puntuacion[2],
-                               puntuacion_multi=puntuacion[3],
-                               ahorcadotipo="multi",
-                               puntosactuales=session["puntosactuales"],
-                               jugando=True
-
-                               )
+        return render_template('ahorcadosingle.html', ahorcadotipo="multi", jugando=True)
     else:
         return render_template("ahorcado_multi.html",
                                nombre=session["nombre"],
@@ -368,44 +324,19 @@ def showahorcadosingle():
         session["puntosactuales"] = 0
 
         return render_template('ahorcadosingle.html',
-                               nombre=session['nombre'],
-                               email=session['email'],
-                               faseactual=session["faseactual"],
                                palabra=palabra,
                                palabracodificada=palabracodificada,
-                               record_single=puntuacion[0],
-                               puntuacion_single=puntuacion[1],
-                               record_multi=puntuacion[2],
-                               puntuacion_multi=puntuacion[3],
                                ahorcadotipo="single",
-                               puntosactuales=session["puntosactuales"],
-                               jugando=True,
-                               letraspulsadas=session["letraspulsadas"]
-
+                               jugando=True
                                )
     else:
 
-        # TODO: BORRAR .... limpiar letraspulsadas, borrar....
-        letraspulsadas = session["letraspulsadas"]
-        letraspulsadas = list(dict.fromkeys(letraspulsadas))
-        session["letraspulsadas"] = letraspulsadas
+        # # TODO: BORRAR .... limpiar letraspulsadas, borrar....
+        # letraspulsadas = session["letraspulsadas"]
+        # letraspulsadas = list(dict.fromkeys(letraspulsadas))
+        # session["letraspulsadas"] = letraspulsadas
 
-        return render_template("ahorcadosingle.html",
-                               nombre=session["nombre"],
-                               faseactual=session["faseactual"],
-                               palabra=session["palabra"],
-                               palabracodificada=session["palabracodificada"],
-                               email=session["email"],
-                               fraseganador=session["fraseganador"],
-                               vermensaje=session["vermensaje"],
-                               puntuacion_single=session["puntuacion_single"],
-                               record_single=session["record_single"],
-                               ahorcadotipo="single",
-                               puntosactuales=session["puntosactuales"],
-                               jugando=True,
-                               finalizado=session["finalizado"],
-                               letraspulsadas=session["letraspulsadas"]
-                               )
+        return render_template("ahorcadosingle.html", ahorcadotipo="single", jugando=True)
 
 
 @app.route("/ahorcadosingle", methods=["POST"])
@@ -413,22 +344,8 @@ def recibirdatos_ahorcado_single():
     if not ("opcionletra" in request.form):
         return redirect(url_for("entrar"))
 
-    if not ("email" in session) \
-            or not ("nombre" in session) \
-            or not ("nuevo" in session) \
-            or not ("password" in session) \
-            or not ("puntuacion_multi" in session) \
-            or not ("faseactual" in session) \
-            or not ("puntuacion_single" in session) \
-            or not ("record_single" in session) \
-            or not ("record_multi" in session) \
-            or not ("puntosactuales" in session) \
-            or not ("palabra" in session) \
-            or not ("palabracodificada" in session) \
-            or not ("fraseganador" in session) \
-            or not ("vermensaje" in session) \
-            or not ("puntosactuales" in session):
-        return redirect(url_for("cerrarsesion"))
+    # comprobamos que session no le falte ningun campo
+    comprobarsession()
 
     if session["faseactual"] >= 7:
         session["nuevo"] = True
@@ -450,30 +367,32 @@ def recibirdatos_ahorcado_single():
 
     letraspulsadas: list = session["letraspulsadas"]
     letraspulsadas.append(letra)
-    # limpiar letraspulsadas
+    # limpiar letraspulsadas de letras duplicadas
+    # aunque no hace falta ya que se deshabilita el boton
+    # TODO posiblemente se pueda borrar..
     letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
 
     for i in range(0, len(palabra)):
         if palabra[i] == letra:
-            palabracodificada = ahor.changeString(
-                i, palabra[i], palabracodificada)
+            palabracodificada = ahor.changeString(i, palabra[i], palabracodificada)
             encontrado = True
 
     if encontrado == True:
+        # la letrapulsada esta dentro de palabra
+        # si NO hay - en la palabracodificada => VICTORIA
+        # sino => acierto
+
         if palabracodificada.count("-") == 0:
             print("victoria")
-            # ahor.finalizado = True
             session["finalizado"] = True
             puntosactuales += 100
-
-            fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
-            p = ahor.setpuntuacion(puntosactuales, session["puntuacion_single"], session["record_single"],
-                                   session["email"])
-
             vermensaje = True
-        else:
+            fraseganador = ahor.getfraseganador(puntosactuales, session["puntuacion_single"], session["record_single"])
+            ahor.setpuntuacion(puntosactuales, session["puntuacion_single"], session["record_single"],
+                               session["email"])
 
+        else:
             punto = ahor.getPalabraPuntuacion(letra)
             if (letra in palabracodificadaantes):
                 punto = 0
@@ -483,10 +402,10 @@ def recibirdatos_ahorcado_single():
             else:
                 # sumamos 5 puntos en caso de fallo
                 puntosactuales += 5
-
-
-
     else:
+        # fallamos. la letra pulsada no esta dentro de la palabra
+        # si la fase no es 6, error y sumamos una fase
+        # sino es que hemos perdido totalmente...OOOHHH!!
         if faseactual < 6:
             faseactual += 1
             # session["faseactual"] = faseactual
@@ -501,17 +420,19 @@ def recibirdatos_ahorcado_single():
             ahor.setpuntuacion(puntosactuales, session["puntuacion_single"], session["record_single"],
                                session["email"])
 
+    # colocamos las variables otra vez dentro de session
     session["nombre"] = request.form["nombre"]
     session["faseactual"] = faseactual
     session["palabra"] = palabra
     session["palabracodificada"] = palabracodificada
-    session["email"] = request.form["email"]
+    # session["email"] = request.form["email"]
     session["fraseganador"] = fraseganador
     session["vermensaje"] = vermensaje
     session["puntuacion_single"] = puntuacion_single
     session["record_single"] = record_single
     session["puntosactuales"] = puntosactuales
 
+    # pasamos a la funcion para que enseñe los cambios
     return redirect(url_for("showahorcadosingle"))
 
 
@@ -586,6 +507,25 @@ def verrankings():
 # @app.route("/ahorcado", methods=["POST"])
 # def recibirdatos(finalizado=False):
 #     ahor.finalizado = True
+
+
+def comprobarsession():
+    if not ("email" in session) \
+            or not ("nombre" in session) \
+            or not ("nuevo" in session) \
+            or not ("password" in session) \
+            or not ("puntuacion_multi" in session) \
+            or not ("faseactual" in session) \
+            or not ("puntuacion_single" in session) \
+            or not ("record_single" in session) \
+            or not ("record_multi" in session) \
+            or not ("puntosactuales" in session) \
+            or not ("palabra" in session) \
+            or not ("palabracodificada" in session) \
+            or not ("fraseganador" in session) \
+            or not ("vermensaje" in session) \
+            or not ("puntosactuales" in session):
+        return redirect(url_for("cerrarsesion"))
 
 
 if __name__ == "__main__":
