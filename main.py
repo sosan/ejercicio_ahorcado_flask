@@ -6,6 +6,9 @@
     v.0.2 SQL de usuarios
 """
 
+
+
+
 # inicializar librerias
 from flask import Flask
 from flask import render_template
@@ -389,14 +392,15 @@ def recibirdatos_ahorcado_single():
     puntosactuales = session["puntosactuales"]
     palabracodificadaantes = palabracodificada
 
-    letraspulsadas:set = {}
+    # letraspulsadas = set()
 
-    # letraspulsadas: list = session["letraspulsadas"]
+    letraspulsadas: list = session["letraspulsadas"]
     letraspulsadas.append(letra)
     # limpiar letraspulsadas de letras duplicadas
     # aunque no hace falta ya que se deshabilita el boton
     # TODO posiblemente se pueda borrar..
-    # letraspulsadas = list(dict.fromkeys(letraspulsadas))
+    
+    letraspulsadas = list(dict.fromkeys(letraspulsadas))
     session["letraspulsadas"] = letraspulsadas
     
     
@@ -557,4 +561,5 @@ def comprobarsession():
 
 
 if __name__ == "__main__":
-    app.run("127.0.0.1", 5000, debug=True)
+    app.run("127.0.0.1", 5001, debug=True)
+
